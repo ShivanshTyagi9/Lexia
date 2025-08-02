@@ -4,9 +4,8 @@ package-lock.json
 package.json
 test.py
 /.ipynb_checkpoints/
-.env
-/Local/__pycache__/
+Local/.env
+Local/__pycache__/
+Local/utils/__pycache__/
 /__pycache__/
-/Local/utils/__pycache__/
-/__pycache__/
-/Local/data/
+Local/data/
