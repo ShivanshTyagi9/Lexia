@@ -1,0 +1,6 @@
+/node_modules/
+/rag-frontend/
+package-lock.json
+package.json
+test.py
+/.ipynb_checkpoints/
