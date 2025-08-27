@@ -300,7 +300,7 @@ class Settings:
 
 ## 🛣️ Roadmap
 
-### Short Term (v1.1)
+### Upcominf features
 - [ ] Feedback mechanism
 - [ ] support for different LLMs (Local LLMs and other LLM providers)
 - [ ] Database Optimization 
@@ -311,38 +311,9 @@ class Settings:
 - [ ] streaming chat completion
 - [ ] Federated search across multiple sources
 
-### Medium Term (v1.2)
-- [ ] ElasticSearch backend option
-- [ ] Multi-language support
-- [ ] Advanced metadata filtering
-- [ ] Real-time document updates
-
-### Long Term (v2.0)
-- [ ] Multi-modal support (images, charts)
-
-- [ ] Advanced analytics dashboard
-- [ ] Custom model fine-tuning pipeline
-
 ## 🤝 Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-
-```bash
-# Install development dependencies
-pip install -r requirements-dev.txt
-
-# Run tests
-pytest
-
-# Run linting
-flake8 src/
-black src/
-
-# Run type checking
-mypy src/
-```
 
 ## 📄 License
 
@@ -354,14 +325,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Sentence Transformers](https://www.sbert.net/) for embedding models
 - [Whoosh](https://whoosh.readthedocs.io/) for BM25 search capabilities
 - [FastAPI](https://fastapi.tiangolo.com/) for the robust API framework
-
-## 📞 Support
-
-- 📧 **Email**: support@yourproject.com
-- 💬 **Discord**: [Join our community](https://discord.gg/yourproject)
-- 🐛 **Issues**: [GitHub Issues](https://github.com/yourusername/hybrid-rag-pipeline/issues)
-- 📖 **Documentation**: [Full Documentation](https://your-docs-site.com)
-
 ---
 
 **⭐ If this project helped you, please consider giving it a star!**
