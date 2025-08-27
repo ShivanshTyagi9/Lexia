@@ -110,8 +110,8 @@ graph TB
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/hybrid-rag-pipeline.git
-cd hybrid-rag-pipeline
+git clone https://github.com/ShivanshTyagi9/Lexia.git
+cd Lexia
 
 # Create virtual environment
 python -m venv venv
@@ -231,20 +231,6 @@ Content-Type: application/json
 }
 ```
 
-### Feedback & Analytics
-
-#### Submit Feedback
-```http
-POST /feedback
-Content-Type: application/json
-
-{
-  "query": "original question",
-  "answer": "generated answer",
-  "feedback": "positive",  // "positive" or "negative"
-  "notes": "Very helpful answer"
-}
-```
 
 ### Administration
 
@@ -258,95 +244,7 @@ Parameters:
 - `recreate`: true/false (recreate empty collection)
 - `wipe_whoosh`: true/false (clear BM25 index)
 
-## 🎨 Frontend Integration
-
-### React Example
-
-```jsx
-import React, { useState } from 'react';
-
-function RAGChat() {
-  const [query, setQuery] = useState('');
-  const [answer, setAnswer] = useState(null);
-  const [loading, setLoading] = useState(false);
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    
-    try {
-      const response = await fetch('http://localhost:8000/answer', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query })
-      });
-      
-      const result = await response.json();
-      setAnswer(result);
-    } catch (error) {
-      console.error('Error:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  return (
-    <div className="rag-chat">
-      <form onSubmit={handleSubmit}>
-        <input
-          type="text"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Ask a question about your documents..."
-        />
-        <button type="submit" disabled={loading}>
-          {loading ? 'Searching...' : 'Ask'}
-        </button>
-      </form>
-      
-      {answer && (
-        <div className="answer">
-          <h3>Answer:</h3>
-          <p>{answer.answer}</p>
-          
-          <h4>Sources:</h4>
-          {answer.citations.map((citation, i) => (
-            <div key={i} className="citation">
-              📄 {citation.doc_title} (p. {citation.pages.join(', ')})
-            </div>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
 ```
-
-## 📊 Evaluation & Benchmarking
-
-The system includes a comprehensive evaluation framework:
-
-```bash
-# Run evaluation on a test dataset
-python rag_next_steps.py eval \
-  --data data/devset.jsonl \
-  --out results/metrics.json \
-  --k 10 \
-  --mode hybrid
-
-# Generate evaluation report
-python rag_next_steps.py report \
-  --results results/metrics.json \
-  --output evaluation_report.html
-```
-
-### Metrics Computed
-
-- **Recall@k**: Fraction of relevant documents retrieved
-- **nDCG@k**: Normalized Discounted Cumulative Gain
-- **MRR**: Mean Reciprocal Rank
-- **Precision@k**: Precision at different cut-offs
-- **Answer Quality**: LLM-based evaluation of generated responses
 
 ## ⚙️ Configuration
 
@@ -400,68 +298,18 @@ class Settings:
     TEMPERATURE = 0.1
 ```
 
-## 🔧 Deployment
-
-### Docker Deployment
-
-```dockerfile
-# Dockerfile
-FROM python:3.9-slim
-
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-
-COPY . .
-
-EXPOSE 8000
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
-```
-
-```yaml
-# docker-compose.yml
-version: '3.8'
-
-services:
-  qdrant:
-    image: qdrant/qdrant
-    ports:
-      - "6333:6333"
-      - "6334:6334"
-    volumes:
-      - qdrant_data:/qdrant/storage
-
-  rag-api:
-    build: .
-    ports:
-      - "8000:8000"
-    depends_on:
-      - qdrant
-    environment:
-      - QDRANT_HOST=qdrant
-    volumes:
-      - ./data:/app/data
-
-volumes:
-  qdrant_data:
-```
-
-### Production Checklist
-
-- [ ] Set up proper logging and monitoring
-- [ ] Configure authentication and authorization
-- [ ] Implement rate limiting
-- [ ] Set up backup strategies for vector database
-- [ ] Configure HTTPS/TLS
-- [ ] Monitor resource usage and scaling needs
-
 ## 🛣️ Roadmap
 
 ### Short Term (v1.1)
-- [ ] Document-specific deletion endpoint (`DELETE /documents/{doc_id}`)
-- [ ] Improved table QA with structured data analysis
-- [ ] Web UI with citation highlighting
+- [ ] Feedback mechanism
+- [ ] support for different LLMs (Local LLMs and other LLM providers)
+- [ ] Database Optimization 
 - [ ] Batch processing for large document sets
+- [ ] multi-query retrieval
+- [ ] Agentic RAG pipeline
+- [ ] creating essential tools
+- [ ] streaming chat completion
+- [ ] Federated search across multiple sources
 
 ### Medium Term (v1.2)
 - [ ] ElasticSearch backend option
@@ -471,7 +319,7 @@ volumes:
 
 ### Long Term (v2.0)
 - [ ] Multi-modal support (images, charts)
-- [ ] Federated search across multiple sources
+
 - [ ] Advanced analytics dashboard
 - [ ] Custom model fine-tuning pipeline
 
