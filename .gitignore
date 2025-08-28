@@ -1,0 +1,7 @@
+node_modules
+rag-frontend/.next
+rag-frontend/node_modules
+__pycache__
+.env
+Local/data
+Local/whoosh_index
