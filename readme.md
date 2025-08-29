@@ -5,6 +5,14 @@
 
 A production-ready **Retrieval-Augmented Generation (RAG)** system optimized for **notes, research papers, books, and tables**. This implementation combines the best of semantic search, keyword matching, and intelligent reranking to deliver highly relevant answers with precise citations.
 
+## Updates:
+
+* **29th August,2025**
+  * Modularized LLM call
+  * Added support for Local LLMs via Ollama
+  * Modified config
+  * Support for Sentence-Transformer embeddings model
+
 ## ✨ Key Features
 
 * **🔄 Hybrid Retrieval Architecture**
