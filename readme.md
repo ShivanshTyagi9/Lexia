@@ -1,6 +1,6 @@
 # 📚 Hybrid RAG Pipeline (Qdrant + BM25 + Reranker)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.12](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.68+-green.svg)](https://fastapi.tiangolo.com/)
 
 A production-ready **Retrieval-Augmented Generation (RAG)** system optimized for **notes, research papers, books, and tables**. This implementation combines the best of semantic search, keyword matching, and intelligent reranking to deliver highly relevant answers with precise citations.
