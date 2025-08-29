@@ -11,6 +11,8 @@ from utils.config import RAGConfig
 from utils.ingest import ensure_whoosh, upsert
 from utils.retrieve import retrieve as base_retrieve 
 from utils.ingestion_log import update_log
+from utils.llm import generate_answer
+
 
 # ---------------- Config & Globals ----------------
 Cfg = RAGConfig()
@@ -18,10 +20,6 @@ DATA_DIR = os.path.join(getattr(Cfg, "data_dir", "./data"), "pdfs")
 load_dotenv()
 qdrant_client: QdrantClient | None = None
 whoosh_index = None
-
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
-LLM_MODEL = os.getenv("LLM_MODEL", "gpt-4o-mini")
-MAX_CONTEXT_CHARS = int(os.getenv("RAG_MAX_CTX_CHARS", "18000"))
 
 # ---------------- Lifespan ----------------
 @asynccontextmanager
@@ -62,74 +60,6 @@ def _ensure_ready():
     if qdrant_client is None or whoosh_index is None:
         raise HTTPException(status_code=503, detail="Service not initialized yet")
 
-def _fmt_citation(item: Dict[str, Any]) -> str:
-    pages = item.get("pages") or item.get("page_nums") or []
-    p = f" p.{pages[0]}" if pages else ""
-    return f"[{item.get('chunk_id', item.get('id', '?'))}{p}]"
-
-def _build_context(retrieved: List[Dict[str, Any]], max_chars: int = MAX_CONTEXT_CHARS) -> str:
-    parts = []
-    used = 0
-    for it in retrieved:
-        header = f"- [{it.get('doc_title','')}] {it.get('section_title','')} • p.{','.join(map(str, it.get('pages', it.get('page_nums', []))))} • chunk_id={it.get('chunk_id', it.get('id',''))}"
-        body = (it.get("text") or "").strip()
-        seg = header + "\n" + body + "\n\n"
-        if used + len(seg) > max_chars:
-            break
-        parts.append(seg)
-        used += len(seg)
-    return "".join(parts)
-
-def _generate_answer(question: str, contexts: List[Dict[str, Any]]) -> Dict[str, Any]:
-    """
-    Returns {answer, citations, provider}
-    Tries OpenAI if OPENAI_API_KEY is set; otherwise uses a deterministic extractive fallback.
-    """
-    if not contexts:
-        return {"answer": "Not found.", "citations": [], "provider": "none"}
-
-    # Try OpenAI
-    if OPENAI_API_KEY:
-        try:
-            from openai import OpenAI
-            client = OpenAI(api_key=OPENAI_API_KEY)
-
-            system = (
-                "You are a careful assistant. Answer using ONLY the supplied passages. "
-
-                "If unknown from passages, say 'Not found.'"
-            )
-            user = f"Question: {question}\n\nPassages:\n{_build_context(contexts)}\n"
-
-            resp = client.chat.completions.create(
-                model=LLM_MODEL,
-                messages=[{"role":"system","content":system},{"role":"user","content":user}],
-                temperature=0.2
-            )
-            answer = resp.choices[0].message.content.strip()
-            cits = [{"chunk_id": c.get("chunk_id", c.get("id","?")),
-                     "doc_title": c.get("doc_title",""),
-                     "pages": c.get("pages", c.get("page_nums", []))}
-                    for c in contexts]
-            return {"answer": answer, "citations": cits, "provider": "openai"}
-        except Exception as e:
-            # fall through to deterministic fallback
-            pass
-
-    # Fallback: stitch a concise extract with citations from top 3 chunks
-    lines = []
-    for it in contexts[:3]:
-        text = (it.get("text") or "").strip()
-        excerpt = " ".join(text.split()[:80])
-        if excerpt:
-            lines.append(excerpt + " " + _fmt_citation(it))
-    answer = " ".join(lines) if lines else "Not found."
-    cits = [{"chunk_id": c.get("chunk_id", c.get("id","?")),
-             "doc_title": c.get("doc_title",""),
-             "pages": c.get("pages", c.get("page_nums", []))}
-            for c in contexts]
-    return {"answer": answer.strip(), "citations": cits, "provider": "fallback"}
-
 def _filter_mode(results: List[Dict[str, Any]], mode: str) -> List[Dict[str, Any]]:
     """
     Soft filter for 'text' | 'table' | 'hybrid'.
@@ -144,13 +74,20 @@ def _filter_mode(results: List[Dict[str, Any]], mode: str) -> List[Dict[str, Any
 @app.get("/health")
 def health():
     _ensure_ready()
+    # import here to avoid circulars
+    from utils.llm import LLM_PROVIDER, OPENAI_API_KEY, OPENAI_MODEL, OLLAMA_MODEL, OLLAMA_BASE
     return {
         "ok": True,
         "qdrant": True,
         "whoosh": True,
         "collection": Cfg.collection,
-        "openai": bool(OPENAI_API_KEY),
+        "llm_provider": LLM_PROVIDER,
+        "openai_key_present": bool(OPENAI_API_KEY),
+        "openai_model": OPENAI_MODEL,
+        "ollama_model": OLLAMA_MODEL,
+        "ollama_base": OLLAMA_BASE,
     }
+
 
 @app.post("/upload")
 async def upload_file(file: UploadFile = File(...)):
@@ -214,8 +151,9 @@ def answer_endpoint(payload: dict = Body(...)):
     try:
         hits = base_retrieve(qdrant_client, whoosh_index, question, final_k=k)
         hits = _filter_mode(hits, mode)
-        pack = _generate_answer(question, hits)
-        # include retrieved chunks and a tiny latency trace
+
+        pack = generate_answer(question, hits)
+
         return {
             "query": question,
             "mode": mode,
