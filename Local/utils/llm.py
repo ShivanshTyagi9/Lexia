@@ -4,6 +4,7 @@ import os, json, time
 from typing import Dict, Any, List, Tuple, Optional
 from dotenv import load_dotenv
 load_dotenv()
+
 # ---------- Config via env ----------
 LLM_PROVIDER = os.getenv("LLM_PROVIDER", "auto").lower()     # "auto" | "openai" | "ollama"
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "").strip()
