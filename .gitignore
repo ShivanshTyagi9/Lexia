@@ -5,3 +5,6 @@ __pycache__
 .env
 Local/data
 Local/whoosh_index
+wow.tsx
+dist
+rag-page

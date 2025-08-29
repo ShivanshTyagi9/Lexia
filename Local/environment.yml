@@ -1,0 +1,15 @@
+# environment.yml
+name: lexia
+channels: [pytorch, conda-forge, defaults]
+dependencies:
+  - python=3.11
+  - numpy=1.26.*
+  - scipy=1.11.*
+  - scikit-learn=1.3.*
+  - pytorch=2.2.*
+  - pip
+  - pip:
+    - sentence-transformers==2.7.0
+    - transformers==4.41.2
+    - accelerate==0.29.3
+    - safetensors

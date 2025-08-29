@@ -1,5 +1,10 @@
 {
   "dependencies": {
+    "@react-three/drei": "^10.7.4",
+    "@react-three/fiber": "^9.3.0",
     "lucide-react": "^0.535.0"
+  },
+  "scripts": {
+    "deploy": "gh-pages -d dist"
   }
 }

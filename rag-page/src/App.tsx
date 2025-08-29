@@ -1,3 +1,4 @@
+
 import { useEffect, useRef, useState } from "react";
 
 // Add mermaid type to window
@@ -261,63 +262,70 @@ export default function MinimalRAG() {
   ];
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-zinc-200 selection:text-zinc-900 flex flex-col items-center">
-      {/* Header */}
-      <header className="sticky top-0 z-50 backdrop-blur-xl bg-zinc-950/90 border-b border-zinc-800 w-full">
-        <div className="mx-auto w-full max-w-7xl flex items-center justify-between px-6 sm:px-10 py-4">
-          <button 
-            onClick={() => scrollToSection('overview')}
-            className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded-lg p-1 -m-1"
-            aria-label="Go to overview section"
-          >
-            <span className="inline-block h-3 w-3 rounded-full bg-emerald-400 group-hover:scale-110 group-focus:scale-110 transition-transform duration-200" />
-            <span className="text-xs tracking-[0.2em] uppercase text-zinc-400 group-hover:text-zinc-200 transition-colors">
-              Lexia
-            </span>
-          </button>
-          
-          <nav className="hidden sm:flex items-center gap-6 text-sm">
-            {[
-              ["Overview", "overview"],
-              ["Flow", "flow"],
-              ["Strategies", "strategies"],
-              ["Endpoints", "endpoints"],
-            ].map(([label, sectionId]) => (
-              <button
-                key={label}
-                onClick={() => scrollToSection(sectionId)}
-                className={`hover:text-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2 py-1 ${
-                  activeSection === sectionId ? 'text-emerald-400' : 'text-zinc-400'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-          </nav>
-        </div>
-      </header>
-
-      <main className="mx-auto w-full max-w-7xl px-6 sm:px-10">
-        {/* Overview / Hero */}
-        <section id="overview" className="mx-auto max-w-5xl pt-8 sm:pt-16 pb-16">
-          <div className="fade-in-up">
-            <h1 className="text-[clamp(1.9rem,6vw,4rem)] font-semibold leading-[1.05] tracking-tight">
-              Hybrid RAG for Files → Answers
-              <span className="block text-zinc-400 font-normal mt-2">
-                FastAPI • Qdrant • Whoosh • RRF • Cross-encoder
+  <div className="min-h-screen bg-zinc-950 text-zinc-100 selection:bg-zinc-200 selection:text-zinc-900 flex flex-col items-center">
+    <div className="w-full flex justify-center">
+      <div className="w-full max-w-7xl">
+        {/* Header */}
+        <header className="sticky top-0 z-50 backdrop-blur-xl bg-zinc-950/90 border-b border-zinc-800 w-full">
+          <div className="mx-auto w-full max-w-7xl flex items-center justify-center sm:justify-between px-6 sm:px-10 py-4">
+            <button
+              onClick={() => scrollToSection("overview")}
+              className="flex items-center gap-2 group focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded-lg p-1 -m-1"
+              aria-label="Go to overview section"
+            >
+              <span className="inline-block h-3 w-3 rounded-full bg-emerald-400 group-hover:scale-110 group-focus:scale-110 transition-transform duration-200" />
+              <span className="text-xs tracking-[0.2em] uppercase text-zinc-400 group-hover:text-zinc-200 transition-colors">
+                Lexia
               </span>
-            </h1>
-            
-            <p className="mt-6 max-w-2xl text-zinc-400 text-lg leading-relaxed">
-              Upload PDFs/DOCX/MD/TXT, structure-aware chunking, dual-index (dense + BM25), 
-              reciprocal rank fusion, cross-encoder rerank, and a diversity head feeding 
-              context to the answerer.
-            </p>
+            </button>
 
-            {/* Accent underline with animation */}
-            <div className="mt-8 h-[2px] bg-gradient-to-r from-emerald-400 to-emerald-300/60 w-48 accent-line" />
+            <nav className="hidden sm:flex items-center gap-6 text-sm">
+              {[
+                ["Overview", "overview"],
+                ["Flow", "flow"],
+                ["Strategies", "strategies"],
+                ["Endpoints", "endpoints"],
+              ].map(([label, sectionId]) => (
+                <button
+                  key={label}
+                  onClick={() => scrollToSection(sectionId)}
+                  className={`hover:text-zinc-200 transition-colors focus:outline-none focus:ring-2 focus:ring-emerald-400 rounded px-2 py-1 ${
+                    activeSection === sectionId
+                      ? "text-emerald-400"
+                      : "text-zinc-400"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </nav>
           </div>
-        </section>
+        </header>
+
+        <main className="mx-auto w-full max-w-7xl px-6 sm:px-10">
+          {/* Overview / Hero */}
+          <section
+            id="overview"
+            className="mx-auto max-w-5xl pt-8 sm:pt-16 pb-16"
+          >
+            <div className="fade-in-up">
+              <h1 className="text-[clamp(1.9rem,6vw,4rem)] font-semibold leading-[1.05] tracking-tight">
+                Hybrid RAG for Files → Answers
+                <span className="block text-zinc-400 font-normal mt-2">
+                  FastAPI • Qdrant • Whoosh • RRF • Cross-encoder
+                </span>
+              </h1>
+
+              <p className="mt-6 max-w-2xl text-zinc-400 text-lg leading-relaxed">
+                Upload PDFs/DOCX/MD/TXT, structure-aware chunking, dual-index
+                (dense + BM25), reciprocal rank fusion, cross-encoder rerank,
+                and a diversity head feeding context to the answerer.
+              </p>
+
+              {/* Accent underline with animation */}
+              <div className="mt-8 h-[2px] bg-gradient-to-r from-emerald-400 to-emerald-300/60 w-48 accent-line" />
+            </div>
+          </section>
 
         {/* Mermaid Flowchart */}
         <section id="flow" className="pb-16">
@@ -423,6 +431,8 @@ export default function MinimalRAG() {
           </div>
         </footer>
       </main>
+    </div>
+  </div>
 
       {/* Enhanced CSS animations and styles */}
       <style>{`
