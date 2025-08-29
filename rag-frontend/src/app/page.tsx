@@ -1,4 +1,4 @@
-import DocuChatLayout from '@/components/docu-chat/docu-chat-layout';
+import DocuChatLayout from '@/components/Lexia/Lexia-layout';
 
 export default function HomePage() {
   return <DocuChatLayout />;

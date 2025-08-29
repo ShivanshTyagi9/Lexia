@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react';
 import type { Document, Message } from '../../lib/types';
-import { DocumentPane } from '@/components/docu-chat/document-pane';
-import { ChatPane } from '@/components/docu-chat/chat-pane';
+import { DocumentPane } from '@/components/Lexia/document-pane';
+import { ChatPane } from '@/components/Lexia/chat-pane';
 
 export default function DocuChatLayout() {
   const [documents, setDocuments] = useState<Document[]>([]);
