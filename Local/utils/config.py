@@ -8,13 +8,17 @@ class RAGConfig:
     index_dir: str = "whoosh_index"
 
     # Models
-    embed_model: str = "intfloat/e5-small-v2"        # or "Alibaba-NLP/gte-small"
-    reranker_model: str = "BAAI/bge-reranker-base"  # or "-base" for more accuracy
+    # embed_model: str = "intfloat/e5-small-v2"        # or "Alibaba-NLP/gte-small"
+    # reranker_model: str = "BAAI/bge-reranker-base"  # or "-base" for more accuracy
+
+    embed_model = "sentence-transformers/all-MiniLM-L6-v2"
+    reranker_model = "cross-encoder/ms-marco-MiniLM-L-6-v2"
+
 
     # Qdrant
     qdrant_host: str = "127.0.0.1"
     qdrant_port: int = 6333
-    dim: int = 384  # e5-small/gte-small
+    dim: int = 384
     hnsw_M: int = 32
     hnsw_ef_construct: int = 256
     hnsw_ef_search: int = 64
